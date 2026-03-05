@@ -29,7 +29,7 @@ namespace Projekti_varasto
 				Model = "Toyota Corolla",
 				Amount = 1,
 				ManufactoYear = 2005,
-				Price = 3500,
+				Price = 5500,
 				Kilometrit = 220000
 			});
 
