@@ -1,72 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Text.Json;
 
 namespace Projekti_varasto
 {
-
-
-	class Item
-	{
-		public string Model { get; set; }
-
-
-		public int Amount { get; set; }
-
-
-		public int ManufactoYear { get; set; }
-
-
-		public int Price { get; set; }
-
-
-		public void PrintInfo()
-		{
-			Console.WriteLine("Model: " + Model);
-			Console.WriteLine("Amount: " + Amount);
-			Console.WriteLine("MFY: " + ManufactoYear);
-			Console.WriteLine("Price: " + Price);
-		}
-	}
-
-	class Varasto
-	{
-		private List<Item> _items = new List<Item>();
-		private string _filePath = "Tuotteet.json";
-
-		public void AddItem(Item item)
-		{
-			_items.Add(item);
-		}
-
-		public List<Item> GetItems()
-		{
-			return _items;
-		}
-
-		public void SaveItems()
-		{
-			string json = JsonSerializer.Serialize(_items, new JsonSerializerOptions
-			{
-				WriteIndented = true
-			});
-			File.WriteAllText(_filePath, json);
-		}
-
-		public void LoadItems()
-		{
-			if (!File.Exists(_filePath))
-			{
-				_items = new List<Item>();
-				return;
-			}
-
-			string json = File.ReadAllText(_filePath);
-			_items = JsonSerializer.Deserialize<List<Item>>(json);
-		}
-	}
-
 	internal class Program
 	{
 		static void Main(string[] args)
@@ -89,6 +24,15 @@ namespace Projekti_varasto
 				Price = 460,
 			});
 
+			varasto.AddItem(new Auto
+			{
+				Model = "Toyota Corolla",
+				Amount = 1,
+				ManufactoYear = 2005,
+				Price = 3500,
+				Kilometrit = 220000
+			});
+
 			varasto.SaveItems();
 
 			Varasto ladattuVarasto = new Varasto();
@@ -96,7 +40,7 @@ namespace Projekti_varasto
 
 			Console.WriteLine("Tiedostosta luetut tuotteet: \n");
 
-			foreach (var item in ladattuVarasto.GetItems())
+			foreach (IPrintable item in ladattuVarasto.GetItems())
 			{
 				item.PrintInfo();
 				Console.WriteLine();
